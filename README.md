@@ -32,25 +32,25 @@ ENTRYPOINT ["java", "-jar", "app.jar"]
 
 Создаем контейнер базы данных
 ``` bash 
-docker run --name mb-database -e POSTGRES_DB=db postgres
+docker run --name db -e POSTGRES_DB=db postgres
 ```
 
 Создаем сеть, через которую бд и приложение будут общаться
 ``` bash 
-docker network create mb-network
+docker network create app-db
 ```
 
 Коннектим бд к сети
 ``` bash
-docker network connect mb-network mb-database
+docker network connect app-db db
 ```
 
-Собираем изображение приложения
+Собираем изображение
 ``` bash 
-docker build -t mb-app:1.0 .
+docker build -t app:1.0 .
 ```
 
-Запускаем приложение
+Запускаем
 ``` bash 
-docker run --name bm-app -p 8080:8080 --network mb-network mb-app:1.0
+docker run --name app -p 8080:8080 --network app-db app:1.0
 ```
